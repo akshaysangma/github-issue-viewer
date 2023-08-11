@@ -1,0 +1,21 @@
+{{range .Search.Edges}}
+<div class=" py-2 px-3 hover:bg-slate-100">
+    <p class="text-sm font-bold text-gray-950">{{.Node.Repository.NameWithOwner}}</p>
+    <p class="text-sm font-bold text-gray-950">
+    <div class=" inset-y-0 left-0 flex items-center pointer-events-auto">
+        <img class="w-5 h-6 text-gray-500 dark:text-gray-400 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            fill="none" viewBox="0 0 18 20" src="./templates/vendors/svg/Star.svg">{{.Node.Repository.StargazerCount}}
+        </img>
+        <a href="{{.Node.Repository.URL}}" class="font-medium text-blue-600
+            hover:underline absolute right-5" target="_blank">
+            Check out</a>
+    </div>
+    </p>
+    <p class="text-sm text-gray-700">{{printf "%.100s" .Node.Repository.Description}}
+        {{ if gt (len .Node.Repository.Description) 100 }}
+        ...
+        {{end}}
+
+    </p>
+</div>
+{{end}}
