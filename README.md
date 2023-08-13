@@ -1,4 +1,6 @@
 # github-issue-viewer
+# _WORK IN PROGRESS_
+HTMX + TailwindCSS + Go
 
 TODO: Error Middleware, 
 TODO: Tracing Middleware??
