@@ -67,8 +67,9 @@ func main() {
 
 	fs := http.FileServer(http.Dir("templates"))
 	router.Handle("/templates/*", http.StripPrefix("/templates/", fs))
-	router.Get("/home", svrCfg.AuthMiddleware(svrCfg.HomeHandler))
+	router.Get("/login", svrCfg.LoginHandler)
 	router.Get("/oauth/callback", svrCfg.OAuthCallbackHandler)
+	router.Get("/home", svrCfg.AuthMiddleware(svrCfg.HomeHandler))
 	router.Get("/find", svrCfg.AuthMiddleware((svrCfg.SearchForRepositoryHandler)))
 
 	srv := &http.Server{

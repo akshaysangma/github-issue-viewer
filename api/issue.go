@@ -89,7 +89,7 @@ func (s *server) SearchForRepositoryHandler(w http.ResponseWriter, r *http.Reque
 	if err := client.Query(context.Background(), &query, variables); err != nil {
 		s.logger.Fatal(err)
 	}
-
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	tmpl := template.Must(template.ParseFiles("templates/component/search_result.html"))
 	err := tmpl.Execute(w, query)
 	if err != nil {

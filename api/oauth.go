@@ -10,6 +10,33 @@ const (
 	AccessTokenCookieName = "oauth_token"
 )
 
+func (s *server) LoginHandler(w http.ResponseWriter, r *http.Request) {
+	authURL, err := s.oAuth.GenerateAuthURL()
+	if err != nil {
+		http.Error(w, "Undefined", http.StatusInternalServerError)
+		return
+	}
+
+	tmplData := struct {
+		AuthURL string
+	}{
+		AuthURL: authURL,
+	}
+
+	tmplParsed, err := template.ParseFiles("templates/login.html")
+	if err != nil {
+		http.Error(w, "Template error", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	err = tmplParsed.Execute(w, tmplData)
+	if err != nil {
+		http.Error(w, "Template rendering error", http.StatusInternalServerError)
+		return
+	}
+}
+
 func (s *server) HomeHandler(w http.ResponseWriter, r *http.Request, token string) {
 
 	tmplParsed, err := template.ParseFiles("templates/app.html")

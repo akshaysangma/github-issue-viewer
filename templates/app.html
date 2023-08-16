@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Github Issue Viewer</title>
     <script src="./templates/vendors/htmx.org@1.9.4/dist/htmx.min.js"></script>
+    <script src="./templates/vendors/htmx.org@1.9.4/dist/response-targets.js"></script>
     <link href="./templates/vendors/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
 
 </head>
 
-<body>
+<body id="whole-body" hx-ext="response-targets">
     <div class="flex min-h-screen absolute right-5 overflow-hidden">
         <div class="m-5">
             <div class="relative w-96 max-w-lg">
@@ -23,7 +24,7 @@
                                 src="./templates/vendors/svg/SquaresPlus.svg" />
                         </div>
                         <input hx-get="/find" name="input" hx-trigger="keyup changed delay:500ms" type="text"
-                            hx-target="#search-results" id="simple-search"
+                            hx-target="#search-results" hx-target-401="#whole-body" id="simple-search"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Search branch name..." required>
                     </div>
