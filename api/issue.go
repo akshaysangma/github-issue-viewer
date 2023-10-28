@@ -9,11 +9,23 @@ import (
 	"text/template"
 )
 
+// query {
+// 	repository (owner : "golang", name: "go"){
+// 	  nameWithOwner
+// 	  issues (first: 10, orderBy : {field : UPDATED_AT, direction: DESC } ){
+// 		nodes {
+// 			number
+// 		  title
+// 		}
+// 	  }
+// 	}
+//   }
+
 // TODO: Just testing revisit later
 func (s *server) GetIssueForRepositoryHandler(w http.ResponseWriter, r *http.Request, accessToken string) {
 	client := s.gqlCfg.NewClient(accessToken)
 	// List of repositories
-	repositories := []string{"railwayapp/cli", "cockroachdb/cockroach"}
+	repositories := []string{"railwayapp/cli", "golang/go"}
 	var collection []any
 	// Define the GraphQL query using Hasura-generated types
 	for _, repo := range repositories {
@@ -28,19 +40,16 @@ func (s *server) GetIssueForRepositoryHandler(w http.ResponseWriter, r *http.Req
 			} `graphql:"repository(owner: $owner, name: $name)"`
 		}
 
-		// Define variables for the query
 		variables := map[string]interface{}{
 			"owner": strings.Split(repo, "/")[0],
 			"name":  strings.Split(repo, "/")[1],
 		}
 
-		// Construct and execute the GraphQL query
 		if err := client.Query(context.Background(), &query, variables); err != nil {
 			log.Printf("Error querying issues for repository %s: %v", repo, err)
 			continue
 		}
 
-		// Access the issues for the repository using the response struct
 		collection = append(collection, query.Repository)
 	}
 
@@ -58,12 +67,12 @@ func (s *server) SearchForRepositoryHandler(w http.ResponseWriter, r *http.Reque
 	searchInput := r.URL.Query().Get("input")
 
 	client := s.gqlCfg.NewClient(accessToken)
+
 	variables := map[string]interface{}{
 		"query": searchInput,
 		"first": 5,
 	}
 
-	// Define the GraphQL query
 	var query struct {
 		Search struct {
 			RepositoryCount int
@@ -85,7 +94,6 @@ func (s *server) SearchForRepositoryHandler(w http.ResponseWriter, r *http.Reque
 		} `graphql:"search(query: $query, type: REPOSITORY, first: $first)"`
 	}
 
-	// Construct and execute the GraphQL query
 	if err := client.Query(context.Background(), &query, variables); err != nil {
 		s.logger.Fatal(err)
 	}

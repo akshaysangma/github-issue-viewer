@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Github Issue Viewer</title>
-    <script src="./templates/vendors/htmx.org@1.9.4/dist/htmx.min.js"></script>
-    <script src="./templates/vendors/htmx.org@1.9.4/dist/response-targets.js"></script>
-    <link href="./templates/vendors/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
+    <script src="/templates/vendors/htmx.org@1.9.4/dist/htmx.min.js"></script>
+    <script src="/templates/vendors/htmx.org@1.9.4/dist/response-targets.js"></script>
+    <link href="/templates/vendors/tailwindcss@3.3.3/dist/output.css" rel="stylesheet">
 
 </head>
 
@@ -21,7 +21,7 @@
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-auto">
                             <img class="w-6 h-6 text-gray-500 dark:text-gray-400" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20"
-                                src="./templates/vendors/svg/SquaresPlus.svg" />
+                                src="/templates/vendors/svg/SquaresPlus.svg" />
                         </div>
                         <input hx-get="/find" name="input" hx-trigger="keyup changed delay:500ms" type="text"
                             hx-target="#search-results" hx-target-401="#whole-body" id="simple-search"

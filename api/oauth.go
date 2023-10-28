@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	AccessTokenCookieName = "oauth_token"
+	AccessTokenCookieName = "GITHUBISSUETRACKERCOOK"
 )
 
 func (s *server) LoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -74,6 +74,7 @@ func (s *server) OAuthCallbackHandler(w http.ResponseWriter, r *http.Request) {
 		Expires:  time.Now().Add(time.Second * time.Duration(oAuthResp.ExpiresIn)),
 		Path:     "/",
 		SameSite: http.SameSiteStrictMode,
+		HttpOnly: true,
 	})
 
 	w.Header().Set("Location", "/home")
