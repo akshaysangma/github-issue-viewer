@@ -7,36 +7,89 @@ import (
 	"net/http"
 	"strings"
 	"text/template"
+	"time"
 )
 
 // query {
-// 	repository (owner : "golang", name: "go"){
-// 	  nameWithOwner
-// 	  issues (first: 10, orderBy : {field : UPDATED_AT, direction: DESC } ){
-// 		nodes {
-// 			number
-// 		  title
-// 		}
-// 	  }
-// 	}
+//   repository(owner: "golang", name: "go") {
+//     nameWithOwner
+//     issues(first: 1, orderBy: {field: UPDATED_AT, direction: DESC}, states: [OPEN]) {
+//       totalCount
+//       pageInfo {
+//         startCursor
+//         hasNextPage
+//         hasPreviousPage
+//       }
+//       nodes {
+//         title
+//         updatedAt
+//         assignees(first: 1) {
+//           nodes {
+//             name
+//           }
+//         }
+//         milestone {
+//           title
+//         }
+//         labels(first: 10) {
+//           nodes {
+//             name
+//             color
+//           }
+//         }
+//         author {
+//           login
+//         }
+//       }
+//     }
 //   }
+// }
 
 // TODO: Just testing revisit later
-func (s *server) GetIssueForRepositoryHandler(w http.ResponseWriter, r *http.Request, accessToken string) {
+func (s *server) GetIssueForRepositoryHandler(
+	w http.ResponseWriter,
+	r *http.Request,
+	accessToken string,
+) {
 	client := s.gqlCfg.NewClient(accessToken)
 	// List of repositories
 	repositories := []string{"railwayapp/cli", "golang/go"}
 	var collection []any
 	// Define the GraphQL query using Hasura-generated types
 	for _, repo := range repositories {
+
 		var query struct {
 			Repository struct {
-				Issues struct {
-					Nodes []struct {
-						Number int
-						Title  string
+				NameWithOwner string
+				Issues        struct {
+					TotalCount int
+					PageInfo   struct {
+						StartCursor     string
+						HasNextPage     bool
+						HasPreviousPage bool
 					}
-				} `graphql:"issues(first: 10)"`
+					Nodes []struct {
+						Title     string
+						UpdatedAt time.Time
+						Assignees struct {
+							Nodes []struct {
+								Name string
+							}
+						} `graphql:"assignees(first: 1)"`
+						Milestone struct {
+							Title string
+						}
+						Labels struct {
+							Nodes []struct {
+								Name  string
+								Color string
+							}
+						} `graphql:"labels(first: 10)"`
+						Author struct {
+							Login string
+						}
+					}
+				} `graphql:"issues(first: 1, orderBy: {field: UPDATED_AT, direction: DESC}, states: [OPEN])"`
 			} `graphql:"repository(owner: $owner, name: $name)"`
 		}
 
@@ -63,7 +116,11 @@ func (s *server) GetIssueForRepositoryHandler(w http.ResponseWriter, r *http.Req
 	w.Write(data)
 }
 
-func (s *server) SearchForRepositoryHandler(w http.ResponseWriter, r *http.Request, accessToken string) {
+func (s *server) SearchForRepositoryHandler(
+	w http.ResponseWriter,
+	r *http.Request,
+	accessToken string,
+) {
 	searchInput := r.URL.Query().Get("input")
 
 	client := s.gqlCfg.NewClient(accessToken)

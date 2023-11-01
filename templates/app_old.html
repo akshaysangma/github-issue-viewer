@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Github Issue Viewer</title>
+  <script src="/templates/htmx/htmx.min.js"></script>
+  <script src="/templates/htmx/response-targets.js"></script>
+  <link href="/templates/css/output.css" rel="stylesheet">
+
+</head>
+
+<body id="whole-body" hx-ext="response-targets">
+  <div class="grid grid-cols-4 gap-2">
+
+    <!-- Issue viewer -->
+    <div class="grid col-span-3">
+      <div class="flex flex-col rounded-t-3xl  mt-10 ml-5">
+        <div class="flex flex-col bg-gray-50 text-xs text-gray-700 capitalize">
+          opened
+        
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- Repository Search -->
+    <div class="grid col-span-1 m-5">
+
+
+      <div class="m-5">
+        <div class="relative w-96 max-w-lg">
+          <form class="flex items-center">
+            <label for="simple-search" class="sr-only">Search</label>
+            <div class="relative w-full">
+              <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-auto">
+                <img class="w-6 h-6 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20"
+                  src="/templates/assets/img/SquaresPlus.svg" />
+              </div>
+              <input hx-get="/find" name="input" hx-trigger="keyup changed delay:500ms" type="text"
+                hx-target="#search-results" hx-target-401="#whole-body" id="simple-search" 
+                class="border border-gray-300 text-gray-900 text-sm rounded-lg 
+                focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
+                placeholder="Search branch name..." required>
+            </div>
+          </form>
+          <div class="absolute mt-2 w-full overflow-hidden rounded-md bg-white" id="search-results">
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+
+</html>

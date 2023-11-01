@@ -73,7 +73,7 @@ func (s *server) OAuthCallbackHandler(w http.ResponseWriter, r *http.Request) {
 		Value:    oAuthResp.AccessToken,
 		Expires:  time.Now().Add(time.Second * time.Duration(oAuthResp.ExpiresIn)),
 		Path:     "/",
-		SameSite: http.SameSiteStrictMode,
+		SameSite: http.SameSiteLaxMode,
 		HttpOnly: true,
 	})
 
